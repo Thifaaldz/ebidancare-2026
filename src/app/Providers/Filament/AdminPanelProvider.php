@@ -43,14 +43,17 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
+            // ->pages([
+            //     Pages\Dashboard::class,
+            // ])
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\Admin\Pages\Dashboard::class,
             ])
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-            ->widgets([
-                \Awcodes\Overlook\Widgets\OverlookWidget::class,
-            ])
+            // ->widgets([
+            //     \Awcodes\Overlook\Widgets\OverlookWidget::class,
+            // ])
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label('Administration'),
