@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PatientSeeder::class,
             TransactionSeeder::class,
+            MedicalRecordSeeder::class,
             DocumentSeeder::class
         ]);
     }
