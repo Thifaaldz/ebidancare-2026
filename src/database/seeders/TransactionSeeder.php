@@ -15,11 +15,18 @@ class TransactionSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        $patientIds = Patient::pluck('id')->toArray();
-        $userIds = User::pluck('id')->toArray();
+        // Pastikan user ID = 3 ada
+        $user = User::find(3);
 
-        if (empty($userIds)) {
-            $this->command->error('Seeder Transaction dibatalkan: user kosong.');
+        if (! $user) {
+            $this->command->error('Seeder Transaction dibatalkan: User dengan ID = 3 tidak ditemukan.');
+            return;
+        }
+
+        $patientIds = Patient::pluck('id')->toArray();
+
+        if (empty($patientIds)) {
+            $this->command->error('Seeder Transaction dibatalkan: data pasien kosong.');
             return;
         }
 
@@ -35,8 +42,9 @@ class TransactionSeeder extends Seeder
             'Konsultasi Kesehatan Ibu',
         ];
 
-        $startDate = Carbon::now()->subYear()->startOfYear(); // Jan tahun lalu
-        $endDate   = Carbon::now()->endOfYear();              // Des tahun ini
+        // Rentang 1 tahun penuh
+        $startDate = Carbon::now()->subYear()->startOfYear();
+        $endDate   = Carbon::now()->endOfYear();
 
         $totalTransactions = 120;
 
@@ -44,7 +52,6 @@ class TransactionSeeder extends Seeder
             $layanan = $faker->randomElement($layananList);
 
             Transaction::create([
-                // ±70% transaksi terkait pasien
                 'patient_id' => $faker->boolean(70)
                     ? $faker->randomElement($patientIds)
                     : null,
@@ -53,14 +60,16 @@ class TransactionSeeder extends Seeder
 
                 'nominal' => $this->generateNominal($layanan),
 
-                // 🔴 INI BAGIAN KUNCI (1 TAHUN PENUH)
                 'tanggal' => $faker
                     ->dateTimeBetween($startDate, $endDate)
                     ->format('Y-m-d'),
 
-                'created_by' => $faker->randomElement($userIds),
+                // 🔥 FIXED USER
+                'created_by' => 3,
             ]);
         }
+
+        $this->command->info('Seeder Transaction berhasil: 120 transaksi (created_by = user ID 3).');
     }
 
     /**
